@@ -1,0 +1,57 @@
+<ul class="breadcrumb">
+  <li><a href="#/index">Home</a></li>
+  <li><a href="#/messaging">Messaging</a></li>
+  <li class="active">Add new App</li>
+</ul>
+
+<style>
+  .thumb {
+    width: 24px;
+    height: 24px;
+    float: none;
+    position: relative;
+    top: 7px;
+  }
+
+  form .progress {
+    line-height: 15px;
+  }
+
+  .progress {
+    display: inline-block;
+    width: 100px;
+    border: 3px groove #CCC;
+  }
+
+  .progress div {
+    font-size: smaller;
+    background: orange;
+    width: 0;
+  }
+</style>
+
+<div class="page-header">
+  <h1>Create App</h1>
+</div>
+
+<!-- <form-input name="name" label="App name" required="true" property="instance.name" type="text" errors="errors.name"></form-input>
+<button ngf-select="uploadFiles($files, $invalidFiles)" multiple accept="image/*" ngf-max-height="1000" ngf-max-size="1MB">Upload CERT and PEM files (or combined file)</button>
+
+Uploaded Certificates:
+<ul>
+  <li ng-repeat="f in files" style="font:smaller">{{f.name}} {{f.$errorParam}}
+      <span class="progress" ng-show="f.progress >= 0">
+        <div style="width:{{f.progress}}%"
+             ng-bind="f.progress + '%'"></div>
+      </span>
+  </li>
+  <li ng-repeat="f in errFiles" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}
+  </li>
+</ul>
+</body>
+
+<div class="form-actions">
+  <input class="btn btn-primary" name="commit" type="submit" value="Submit" ng-click="submit(instance)" ng-disabled="loading" />
+  <a href="#/messaging" class="btn"> Return</a>
+</div> -->
+<form novalidate class="simple-form simple_form form-horizontal" ng-include src="'templates/views/partials/messaging/app/form_app.html'"></form>

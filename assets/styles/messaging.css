@@ -1,0 +1,257 @@
+container-messaging .panel-heading table {
+  width: 100%;
+}
+
+.container-messaging .table {
+  margin-bottom: 0px !important;
+}
+
+.container-messaging .paginator {
+  margin-bottom: -5px !important;
+}
+
+.container-messaging .application-viewAll {
+  width: 50px;
+}
+
+.container-messaging .application-search {
+  width: 180px;
+}
+
+.container-messaging .new-application {
+  width: 50px;
+  text-align: right;
+}
+
+.container-messaging .search-devices {
+  width: 250px;
+}
+
+.container-messaging .view-devices {
+  width: 60px;
+}
+
+.container-messaging .word-break {
+  word-break: break-all;
+}
+
+.container-messaging .list-group-collapse {
+  cursor: pointer;
+  background-color: #f5f5f5;
+}
+
+.message-form:hover,
+.container-messaging .list-group-collapse:hover {
+  text-decoration: none;
+  cursor: auto;
+}
+
+.container-messaging .list-group-collapse .title-badge {
+  margin-top: 7px;
+  float: left;
+}
+
+.list-group-item .badge {
+  float: none;
+}
+
+.container-messaging .td-link {
+  display: block;
+  width: 100%;
+  min-height: 30px;
+}
+
+.container-messaging .provider {
+  width: 70px;
+}
+
+.container-messaging .channels {
+  width: 100px;
+}
+
+/*.container-messaging .actions {*/
+/*width: 96px;*/
+/*}*/
+
+.container-messaging .paginator {
+  text-align: right;
+}
+
+.container-messaging .message-details .input-group-addon {
+  min-width:140px;
+  text-align:left;
+}
+
+.container-messaging .new-channel {
+  padding: 0 10px;
+}
+
+@media only screen and (max-width : 768px) {
+  .customActionNavbar li {
+    display: block;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+  }
+
+  .customActionNavbar li a {
+    width: 100%;
+  }
+
+  .customActionNavbarHeader .navbar-toggle {
+    padding: 0px !important;
+    margin-top: 0px !important;
+  }
+
+  /*.actions {*/
+  /*width: 100px !important;*/
+  /*}*/
+}
+
+.title-bg-msg {
+  height: 60px;
+  color: white;
+}
+
+.align-right {
+  text-align: right;
+}
+
+.container-messaging .row .list-group-item table tbody {
+  height: 256px;
+}
+
+/*td.actions {*/
+/*width: 250px;*/
+/*}*/
+
+.actions-subscribe {
+  width: 330px;
+}
+
+.actions-subscribe .form-inline {
+  width: 330px;
+  display: inline-block;
+}
+
+.actions-subscribe .select {
+  width: 250px;
+}
+
+.form-group .select {
+  width: 100px;
+}
+
+.customActionNavbarHeader .navbar-collapse {
+  padding-left: 0px !important;
+}
+
+.channels-actions {
+  margin-top: 5px;
+}
+
+.table-full {
+  width: 100%;
+  margin-bottom:  0px !important;
+}
+
+.table-full td {
+  vertical-align: middle !important;
+}
+
+.table-actions-2 {
+  width: 110px;
+  text-align: right;
+  padding-right: 15px !important;
+}
+
+.table-actions-3 {
+  width: 220px;
+  text-align: right;
+  padding-right: 15px !important;
+}
+
+.table-row-links {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.send-message {
+  border-radius: 5px !important;
+}
+
+.send-message input {
+  width: 80% !important;
+}
+
+.send-message .send-message-header select {
+  width: 20% !important;
+}
+
+tfoot {
+  text-align: center;
+  height: 30px;
+}
+
+paginator {
+  height: 35px;
+  display: block;
+}
+
+.subscribe-form {
+  margin-bottom: 10px;
+}
+
+.select-message {
+  border-radius: 0;
+  -webkit-appearance: none;
+}
+
+.select-delay-while-idle {
+  width: 80% !important;
+}
+
+.select-delay-while-idle,
+.btn-cert {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  -webkit-appearance: none;
+}
+
+#collapseMessageDetails {
+  margin-top: 5px;
+}
+
+.message-form .has-error {
+  border-color: #a94442;
+}
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+.cert-toggle {
+  margin-bottom: 15px;
+}
+
+#cert-key-fields input[type=file],
+#pfx-fields input[type=file] {
+  margin-bottom: 15px;
+  color: transparent;
+}

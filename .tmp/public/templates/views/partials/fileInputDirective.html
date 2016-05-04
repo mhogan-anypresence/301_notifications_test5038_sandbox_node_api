@@ -1,0 +1,13 @@
+<div class="form-group string {{optionalValue}}" ng-class="errors.length > 0 ? 'has-error' : ''">
+  <div class="col-md-3">
+    <label class="string {{optionalValue}} control-label" for="{{name}}">
+      <abbr class="required" title="required" ng-if="required">*</abbr>
+      {{label}}
+    </label>
+  </div>
+  <div class="col-md-9">
+    <button class='btn btn-danger' ng-click='removeFile()' ng-if='property'>Remove</button>
+    <input type='file' ng-files="appendFile($files)" ng-if='!property' />
+    <small class="help-inline text-danger" ng-repeat="error in errors">{{formatError(error)}}<br/></small>
+  </div>
+</div>

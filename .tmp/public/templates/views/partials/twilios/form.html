@@ -1,0 +1,29 @@
+<div class="alert alert-danger" ng-if="error">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  <strong>Error.</strong><span ng-if="!errorMessage"> Please review the problems below</span><span ng-if="errorMessage"> {{errorMessage}}</span>
+</div>
+
+    
+        
+        
+        
+            
+            
+            <form-input name="message" label="Message" required="true" property="instance.message" type="text" errors="errors.message"></form-input>
+        
+        
+    
+        
+        
+        
+            
+            
+            <form-input name="to_phone_number" label="To phone number" required="true" property="instance.to_phone_number" type="text" errors="errors.to_phone_number"></form-input>
+        
+        
+    
+
+<div class="form-actions">
+  <input class="btn btn-primary" name="commit" type="submit" value="Submit" ng-click="submit(instance)" ng-disabled="loading"/>
+  <a href="#/twilios" class="btn">Cancel</a>
+</div>

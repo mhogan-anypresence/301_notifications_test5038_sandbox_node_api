@@ -1,0 +1,13 @@
+<ul class="breadcrumb">
+  <li><a href="#/index">Home</a></li>
+  <li><a href="#/orders">Orders</a></li>
+  <li><a href="#/orders/{{instance.id}}">Order</a></li>
+  <li class="active">Edit</li>
+</ul>
+
+<div class="page-header">
+  <h1>Edit Order</h1>
+</div>
+
+<form novalidate class="simple-form simple_form form-horizontal" ng-include src="'templates/views/partials/orders/form.html'">
+</form>

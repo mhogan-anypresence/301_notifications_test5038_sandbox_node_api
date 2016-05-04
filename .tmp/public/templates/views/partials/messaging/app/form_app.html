@@ -1,0 +1,49 @@
+<div class="alert alert-danger" ng-if="error">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  <strong>Error.</strong><span ng-if="!errorMessage"> Please review the problems below</span><span ng-if="errorMessage"> {{errorMessage}}</span>
+</div>
+
+<form-input name="name" label="Name" required="true" property="instance.name" type="text" errors="errors.name"></form-input>
+<form-input name="gcmkey" label="GCM API Key" required="false" property="instance.gcmkey" type="text" errors="errors.gcmkey"></form-input>
+<form-input name="isdefault" label="Default" required="false" property="instance.isDefault" type="checkbox" errors="errors.isDefault"></form-input>
+<form-input name="adminPushOnly" label="Admin Only Push" required="false" property="instance.adminPushOnly" type="checkbox" errors="errors.adminPushOnly"></form-input>
+
+<div class='input-group cert-toggle'>
+  <span class="input-group-addon">Apple Certs</span>
+  <div class='btn-group cert-buttons' data-toggle='buttons'>
+    <button class='btn active btn-cert' ng-class='{"btn-success": showCerts, "btn-default": !showCerts}' ng-click='toggleShowCerts(true)'>
+      <input type='radio' name='ssl-options' id='cert-option' autocomplete='off' checked>
+      Cert / Key
+    </button>
+    <button class='btn btn-default' ng-class='{"btn-success": !showCerts, "btn-default": showCerts}' ng-click='toggleShowCerts(false)'>
+      <input type='radio' name='ssl-options' id='pfx-option' autocomplete='off'>
+      P12 File
+    </button>
+  </div>
+</div>
+
+<form-input name="passphrase" label="Passphrase" required="false" property="instance.passphrase" type="text" errors="errors.passphrase"></form-input>
+<div class='form-group'>
+  <div class='col-md-3'>
+    <label class="string control-label">
+      Environment
+    </label>
+  </div>
+  <div class='col-md-9'>
+    <select class='form-control' ng-model='instance.production' ng-options='o.v as o.n for o in [{ n: "Development", v: false },{ n: "Production", v: true}]'></select>
+  </div>
+</div>
+
+<div id='cert-key-fields' class='file-uploads' ng-if='showCerts'>
+  <file-input name='cert' label='Cert' required='false' errors='errors.cert' property='instance.cert' transform='formatFile'></file-input>
+  <file-input name='privateKey' label='Private Key' required='false' errors='errors.privateKey' property='instance.privateKey'></file-input>
+</div>
+
+<div id='pfx-fields' class='file-uploads' ng-if='!showCerts'>
+  <file-input name='pfx' label='P12 File' required='false' errors='errors.pfx' property='instance.pfx'></file-input>
+</div>
+
+<div class="form-actions">
+  <input class="btn btn-primary" name="commit" type="submit" value="Submit" ng-click="submit(instance)" ng-disabled="loading" />
+  <a href="#/messaging" class="btn"> Return</a>
+</div>

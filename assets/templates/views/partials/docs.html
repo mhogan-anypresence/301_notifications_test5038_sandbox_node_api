@@ -1,0 +1,1385 @@
+<h1><strong><em>notificationstest</em></strong> API Documentation</h1>
+
+<h2>Description</h2>
+
+<p>This document contains all relevant API information for the application &quot;notificationstest&quot;.</p>
+
+<h2>Table of Contents</h2>
+
+<ul>
+<li><a href="#/docs#installing-dependencies">Installing Dependencies</a>
+
+<ul>
+<li><a href="#/docs#node-and-npm">Node and NPM</a></li>
+<li><a href="#/docs#dependencies">Dependencies</a></li>
+</ul></li>
+<li><a href="#/docs#seeding-the-app">Seeding the App</a></li>
+<li><a href="#/docs#running-the-app">Running the App</a>
+
+<ul>
+<li><a href="#/docs#development-vs-production-mode">Development vs. Production Mode</a></li>
+</ul></li>
+<li><a href="#/docs#running-the-test-suite">Running the Test Suite</a></li>
+<li><a href="#/docs#connecting-to-the-app-console">Connecting to the App Console</a></li>
+<li><a href="#/docs#jobs-and-scheduling">Jobs and Scheduling</a>
+
+<ul>
+<li><a href="#/docs#manually-executing-jobs">Manually Executing Jobs</a></li>
+</ul></li>
+<li><a href="#/docs#authentication">Authentication</a></li>
+<li><a href="#/docs#crud-and-query-scope-requests">CRUD and Query Scope Requests</a></li>
+<li><a href="#/docs#push-notifications">Push Notifications</a></li>
+<li><a href="#/docs#file-uploads">File Uploads</a></li>
+<li><a href="#/docs#programmatic-crud-and-query-scope-calls">Programmatic CRUD and Query Scope Calls</a></li>
+<li><a href="#/docs#roles">Roles</a></li>
+<li><a href="#/docs#api-versions">API Versions</a></li>
+<li><a href="#/docs#storage-interfaces">Storage Interfaces</a></li>
+</ul>
+
+<h2><a name="installing-dependencies"></a> Installing Dependencies</h2>
+
+<h3><a name='node-and-npm'></a> Node and NPM</h3>
+
+<p>The link at the bottom of this section contains all the installers for node.
+This applications engines are located in the package.json file or below:</p>
+
+<pre><code class="json">{
+  &#39;node&#39;: &#39;4.4.3&#39;,
+  &#39;npm&#39;: &#39;2.15.1&#39;
+}
+</code></pre>
+
+<p>From the above example, you would find the v4.4.3 installer for your platform
+and use that to setup node. Note that the installer also includes NPM and
+should already be the correct version listed here and in the package.json file.</p>
+
+<p><a href="https://nodejs.org/dist/">Node Distributables</a></p>
+
+<h3><a name='dependencies'></a> Dependencies</h3>
+
+<p>Once you have node and NPM installed, you can install the global dependencies
+required by the application as well as all the local dependencies the application
+requires to run. All of those commands should be executed from the application&#39;s
+root directory, unless noted otherwise.</p>
+
+<p>First, install grunt-cli in order to execute grunt tasks:</p>
+
+<pre><code>npm install grunt-cli -g
+</code></pre>
+
+<p>Next, install all of the application&#39;s local dependencies. This could take a while
+as it downloads and compiles all dependencies.</p>
+
+<pre><code>npm install
+</code></pre>
+
+<p>You will also need to install MongoDB and have it running on your system locally.
+Visit the link below for instructions on setting up MongoDB for your platform:</p>
+
+<h3><a href="http://docs.mongodb.org/manual/installation/">MongoDB Installation Instructions</a></h3>
+
+<h3>Oracle database dependencies</h3>
+
+<p>Oracle database requires Oracle 11.2 or 12.1 client libraries. These are included in Oracle Instant Client RPMs or ZIPs, 
+a full Oracle Client, or a database on the same machine.  Oracle&#39;s standard client-server network compatibility applies, 
+which enables connection to databases with different versions from the Oracle client library version.</p>
+
+<p>Python 2.7 is needed for node-gyp.  Gcc is needed on Linux.  On OS X, install Xcode.</p>
+
+<p>Download the free &#39;Basic&#39; and &#39;SDK&#39; RPMs from <a href="http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html">Oracle Technology Network</a> and
+<a href="http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html#ic_x64_inst">install them</a> as the root user:
+<a href="http://www.oracle.com/technetwork/database/features/instant-client/index-097480.html">Oracle Instant Client</a></p>
+
+<h2><a name="seeding-the-app"></a> Seeding the App</h2>
+
+<p>Everything should be in place to run the application. First, we&#39;ll need to seed
+the initial database with the admin account. </p>
+
+<p>If you have <a href="https://github.com/ddollar/forego">Forego</a> installed on your machine 
+you can execute the following command:</p>
+
+<pre><code>forego run grunt seed
+</code></pre>
+
+<p>If you do not have forego installed, you can use the locally installed node implementation
+by executing:</p>
+
+<pre><code>node ./node_modules/foreman/nf run grunt seed
+</code></pre>
+
+<p>Please note that the path ./node_modules/foreman/nf may have to change if you&#39;re running on 
+a Windows machine.</p>
+
+<p>Once that has finished, you can locate your default username and password by
+executing the following command (on Linux or Mac OS):</p>
+
+<pre><code>grep -A1 email tasks/config/createAdmin.js
+</code></pre>
+
+<p>Which should produce something like:</p>
+
+<pre><code>email: &quot;test@fizz.com&quot;,
+password: &quot;a9c6bd1ac688b671&quot;
+</code></pre>
+
+<p>Otherwise, the fields are located in the file:</p>
+
+<pre><code>tasks/config/createAdmin.js
+</code></pre>
+
+<h2><a name="running-the-app"></a> Running the App</h2>
+
+<p>Executing the following command will start the web server and the background
+processes such as the job scheduler:</p>
+
+<pre><code>PORT=1337 npm start
+</code></pre>
+
+<p>And browse to:</p>
+
+<h3><a href="http://localhost:1337/admin">http://localhost:1337/admin</a></h3>
+
+<p>You can adjust the port by changing the PORT environment variable.</p>
+
+<pre><code>PORT=2222 npm start
+</code></pre>
+
+<p>You can also adjust the instance scaling using the npm script. For example if
+you wanted to have 3 instances of the web process running:</p>
+
+<pre><code>npm start web=3
+</code></pre>
+
+<p>Each process will be started on a separate port, starting from the default or supplied
+port and incrementing up. In this example the default port 5000 would be used and the 
+instances would be listening on ports 5000, 5001 and 5002.</p>
+
+<h3><a name="development-vs-production-mode"></a> Development vs. Production Mode</h3>
+
+<p>You can also use this to execute the app in <strong>production</strong> vs <strong>development</strong>
+mode.</p>
+
+<pre><code>NODE_ENV=production npm start
+</code></pre>
+
+<p>Providing no argument for NODE_ENV starts the app in <strong>development</strong> mode by default.</p>
+
+<h2><a name="running-the-test-suite"></a> Running the Test Suite</h2>
+
+<p>To run the application&#39;s test suite, execute the following command:</p>
+
+<pre><code>npm test
+</code></pre>
+
+<p>You can add custom API test files to:</p>
+
+<pre><code>test/server/
+</code></pre>
+
+<p>Any tests in this folder will be included in the test suite.</p>
+
+<h2><a name="connecting-to-the-app-console"></a> Connecting to the App Console</h2>
+
+<p>The sails framework can also be started in interactive mode with a console.
+To use the console execute:</p>
+
+<pre><code>PORT=1337 npm run console
+</code></pre>
+
+<p>Set the port to any available port that the current application is not running on.</p>
+
+<h2><a name='jobs-and-scheduling'></a> Jobs and Scheduling</h2>
+
+<p>The job scheduler will start automatically when starting the server process using using the
+previously mentioned npm script.</p>
+
+<p>You should see logs from the <strong>clock</strong> process in your output regarding scheduled jobs. The scheduler
+will only schedule and execute the most recent version of your jobs, it will not queue any previous API
+version&#39;s jobs.</p>
+
+<h3><a name="manually-executing-jobs"></a> Manually Executing Jobs</h3>
+
+<p>If you&#39;d like to run a job manually or from a script, you can execute the following command from
+the root directory of our application:</p>
+
+<pre><code>npm run job &lt;job_name&gt;
+</code></pre>
+
+<p>Replacing &lt;job_name&gt; with the name you used to create the job. For example, if you created a job called
+&quot;MonthlyReport&quot;, you would execute:</p>
+
+<pre><code>npm run job MonthlyReport
+</code></pre>
+
+<p>You can also, optionally, supply an API version of the job if you&#39;d like to execute a specific
+version of the job:</p>
+
+<pre><code>npm run job MonthlyReport 2
+</code></pre>
+
+<p>This command would execute version 2 of the MonthlyReport job.</p>
+
+<h2><a name="authentication"></a> Authentication</h2>
+
+<h2>Password (Password) Authentication Strategy</h2>
+
+<p>To login and create a session with the password strategy, simply make a POST
+to following path:</p>
+
+<pre><code>POST /auth/Password/callback
+</code></pre>
+
+<p>Alternatively, you can specify the API version you wish to authenticate against:</p>
+
+<pre><code>POST /auth/v1/Password/callback
+</code></pre>
+
+<p>With a body similar to the following:</p>
+
+<pre><code>{
+  &quot;username&quot;: &quot;test&quot;,
+  &quot;password&quot;: &quot;password&quot;
+}
+</code></pre>
+
+<p>The result of the above call, if the credentials are valid, should be a JSON object
+containing all of the session details.</p>
+
+<h2><a name="crud-and-query-scope-requests"></a> CRUD and Query Scope Requests</h2>
+
+<h2>NotificationLog</h2>
+
+<p><strong>/api/v1/notification_logs</strong> OR <strong>/api/notification_logs</strong></p>
+
+<p>Example payload:
+<code>
+{&quot;message&quot;:&quot;Mohammedanisms moistest&quot;,&quot;notificationType&quot;:&quot;Prelates inconsequential&quot;,&quot;sentAt&quot;:&quot;2013-11-08&quot;,&quot;userName&quot;:&quot;Pertinent horrors&quot;}</code></p>
+
+<h3>Create</h3>
+
+<p>To create a NotificationLog, make a POST like below using a body similar
+to the example payload.</p>
+
+<pre><code>POST /api/notification_logs
+</code></pre>
+
+<h3>Read</h3>
+
+<p>To request a specific NotificationLog object, make a GET using the following
+URL:</p>
+
+<pre><code>GET /api/notification_logs/&lt;id&gt;
+</code></pre>
+
+<p>Replace &quot;id&quot; with the id value for the object.</p>
+
+<p>The read route also supports scopes, both custom and default. To learn more about
+executing scopes see the section below.</p>
+
+<h3>Update</h3>
+
+<p>To update an object, make PUT or POST to the following URL:</p>
+
+<pre><code>PUT or POST /api/notification_logs/&lt;id&gt;
+</code></pre>
+
+<p>Replace &quot;id&quot; with the id value for the object.
+The body of the call should contain the new values.</p>
+
+<h3>Destroy</h3>
+
+<p>To destroy an object, make a DELETE to the following URL:</p>
+
+<pre><code>DELETE /api/notification_logs/&lt;id&gt;
+</code></pre>
+
+<p>Replace &quot;id&quot; with the id value for the object.</p>
+
+<h3>Scopes</h3>
+
+<p>Available scopes for NotificationLog:</p>
+
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Javascript Name</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>all</td>
+<td>allScope</td>
+<td>Returns all instances</td>
+</tr>
+<tr>
+<td>exact_match</td>
+<td>exactMatchScope</td>
+<td>Returns all instances that match the provided fields exactly</td>
+</tr>
+<tr>
+<td>count</td>
+<td>countScope</td>
+<td>Counts all instances</td>
+</tr>
+<tr>
+<td>count<em>exact</em>match</td>
+<td>countExactMatchScope</td>
+<td>Counts all instances that match the provided fields exactly</td>
+</tr>
+</tbody></table>
+
+<p>To execute a scope query:</p>
+
+<pre><code>GET /api/notification_logs?scope=&lt;scope_name&gt;
+</code></pre>
+
+<p>Replace &quot;scope_name&quot; with the value in the name column in the above table. Some scopes
+may require additional query parameters, for example:</p>
+
+<pre><code>GET /api/notification_logs?scope=custom&amp;query[first_name]=bob
+</code></pre>
+
+<p>Use query[field] pattern to send a value to the scope operation.</p>
+
+<h2>Order</h2>
+
+<p><strong>/api/v1/orders</strong> OR <strong>/api/orders</strong></p>
+
+<p>Example payload:
+<code>
+{&quot;desc&quot;:&quot;Academically ruddier&quot;,&quot;name&quot;:&quot;Jack Kovacek&quot;}</code></p>
+
+<h3>Create</h3>
+
+<p>To create a Order, make a POST like below using a body similar
+to the example payload.</p>
+
+<pre><code>POST /api/orders
+</code></pre>
+
+<h3>Read</h3>
+
+<p>To request a specific Order object, make a GET using the following
+URL:</p>
+
+<pre><code>GET /api/orders/&lt;id&gt;
+</code></pre>
+
+<p>Replace &quot;id&quot; with the id value for the object.</p>
+
+<p>The read route also supports scopes, both custom and default. To learn more about
+executing scopes see the section below.</p>
+
+<h3>Update</h3>
+
+<p>To update an object, make PUT or POST to the following URL:</p>
+
+<pre><code>PUT or POST /api/orders/&lt;id&gt;
+</code></pre>
+
+<p>Replace &quot;id&quot; with the id value for the object.
+The body of the call should contain the new values.</p>
+
+<h3>Destroy</h3>
+
+<p>To destroy an object, make a DELETE to the following URL:</p>
+
+<pre><code>DELETE /api/orders/&lt;id&gt;
+</code></pre>
+
+<p>Replace &quot;id&quot; with the id value for the object.</p>
+
+<h3>Scopes</h3>
+
+<p>Available scopes for Order:</p>
+
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Javascript Name</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>all</td>
+<td>allScope</td>
+<td>Returns all instances</td>
+</tr>
+<tr>
+<td>exact_match</td>
+<td>exactMatchScope</td>
+<td>Returns all instances that match the provided fields exactly</td>
+</tr>
+<tr>
+<td>count</td>
+<td>countScope</td>
+<td>Counts all instances</td>
+</tr>
+<tr>
+<td>count<em>exact</em>match</td>
+<td>countExactMatchScope</td>
+<td>Counts all instances that match the provided fields exactly</td>
+</tr>
+</tbody></table>
+
+<p>To execute a scope query:</p>
+
+<pre><code>GET /api/orders?scope=&lt;scope_name&gt;
+</code></pre>
+
+<p>Replace &quot;scope_name&quot; with the value in the name column in the above table. Some scopes
+may require additional query parameters, for example:</p>
+
+<pre><code>GET /api/orders?scope=custom&amp;query[first_name]=bob
+</code></pre>
+
+<p>Use query[field] pattern to send a value to the scope operation.</p>
+
+<h2>SendGrid</h2>
+
+<p><strong>/api/v1/send_grids</strong> OR <strong>/api/send_grids</strong></p>
+
+<p>Example payload:
+<code>
+{&quot;emailFrom&quot;:&quot;Pathologically overviews&quot;,&quot;emailTo&quot;:&quot;Pursuance shelve&quot;,&quot;message&quot;:&quot;Professionally steakhouse&quot;,&quot;subject&quot;:&quot;Toned overcompensated&quot;}</code></p>
+
+<h3>Create</h3>
+
+<p>To create a SendGrid, make a POST like below using a body similar
+to the example payload.</p>
+
+<pre><code>POST /api/send_grids
+</code></pre>
+
+<h3>Read</h3>
+
+<p>To request a specific SendGrid object, make a GET using the following
+URL:</p>
+
+<pre><code>GET /api/send_grids/&lt;id&gt;
+</code></pre>
+
+<p>Replace &quot;id&quot; with the id value for the object.</p>
+
+<p>The read route also supports scopes, both custom and default. To learn more about
+executing scopes see the section below.</p>
+
+<h3>Update</h3>
+
+<p>To update an object, make PUT or POST to the following URL:</p>
+
+<pre><code>PUT or POST /api/send_grids/&lt;id&gt;
+</code></pre>
+
+<p>Replace &quot;id&quot; with the id value for the object.
+The body of the call should contain the new values.</p>
+
+<h3>Destroy</h3>
+
+<p>To destroy an object, make a DELETE to the following URL:</p>
+
+<pre><code>DELETE /api/send_grids/&lt;id&gt;
+</code></pre>
+
+<p>Replace &quot;id&quot; with the id value for the object.</p>
+
+<h3>Scopes</h3>
+
+<p>Available scopes for SendGrid:</p>
+
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Javascript Name</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>all</td>
+<td>allScope</td>
+<td>Returns all instances</td>
+</tr>
+<tr>
+<td>exact_match</td>
+<td>exactMatchScope</td>
+<td>Returns all instances that match the provided fields exactly</td>
+</tr>
+<tr>
+<td>count</td>
+<td>countScope</td>
+<td>Counts all instances</td>
+</tr>
+<tr>
+<td>count<em>exact</em>match</td>
+<td>countExactMatchScope</td>
+<td>Counts all instances that match the provided fields exactly</td>
+</tr>
+</tbody></table>
+
+<p>To execute a scope query:</p>
+
+<pre><code>GET /api/send_grids?scope=&lt;scope_name&gt;
+</code></pre>
+
+<p>Replace &quot;scope_name&quot; with the value in the name column in the above table. Some scopes
+may require additional query parameters, for example:</p>
+
+<pre><code>GET /api/send_grids?scope=custom&amp;query[first_name]=bob
+</code></pre>
+
+<p>Use query[field] pattern to send a value to the scope operation.</p>
+
+<h2>Twilio</h2>
+
+<p><strong>/api/v1/twilios</strong> OR <strong>/api/twilios</strong></p>
+
+<p>Example payload:
+<code>
+{&quot;message&quot;:&quot;Infested exhilarating&quot;,&quot;toPhoneNumber&quot;:&quot;Encouragements foreswore&quot;}</code></p>
+
+<h3>Create</h3>
+
+<p>To create a Twilio, make a POST like below using a body similar
+to the example payload.</p>
+
+<pre><code>POST /api/twilios
+</code></pre>
+
+<h3>Read</h3>
+
+<p>To request a specific Twilio object, make a GET using the following
+URL:</p>
+
+<pre><code>GET /api/twilios/&lt;id&gt;
+</code></pre>
+
+<p>Replace &quot;id&quot; with the id value for the object.</p>
+
+<p>The read route also supports scopes, both custom and default. To learn more about
+executing scopes see the section below.</p>
+
+<h3>Update</h3>
+
+<p>To update an object, make PUT or POST to the following URL:</p>
+
+<pre><code>PUT or POST /api/twilios/&lt;id&gt;
+</code></pre>
+
+<p>Replace &quot;id&quot; with the id value for the object.
+The body of the call should contain the new values.</p>
+
+<h3>Destroy</h3>
+
+<p>To destroy an object, make a DELETE to the following URL:</p>
+
+<pre><code>DELETE /api/twilios/&lt;id&gt;
+</code></pre>
+
+<p>Replace &quot;id&quot; with the id value for the object.</p>
+
+<h3>Scopes</h3>
+
+<p>Available scopes for Twilio:</p>
+
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Javascript Name</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>all</td>
+<td>allScope</td>
+<td>Returns all instances</td>
+</tr>
+<tr>
+<td>exact_match</td>
+<td>exactMatchScope</td>
+<td>Returns all instances that match the provided fields exactly</td>
+</tr>
+<tr>
+<td>count</td>
+<td>countScope</td>
+<td>Counts all instances</td>
+</tr>
+<tr>
+<td>count<em>exact</em>match</td>
+<td>countExactMatchScope</td>
+<td>Counts all instances that match the provided fields exactly</td>
+</tr>
+</tbody></table>
+
+<p>To execute a scope query:</p>
+
+<pre><code>GET /api/twilios?scope=&lt;scope_name&gt;
+</code></pre>
+
+<p>Replace &quot;scope_name&quot; with the value in the name column in the above table. Some scopes
+may require additional query parameters, for example:</p>
+
+<pre><code>GET /api/twilios?scope=custom&amp;query[first_name]=bob
+</code></pre>
+
+<p>Use query[field] pattern to send a value to the scope operation.</p>
+
+<h2>User</h2>
+
+<p><strong>/api/v1/users</strong> OR <strong>/api/users</strong></p>
+
+<p>Example payload:
+<code>
+{&quot;emailAddress&quot;:&quot;latricia.toy18@notificationstest.com&quot;,&quot;password&quot;:&quot;password&quot;,&quot;passwordConfirmation&quot;:&quot;password&quot;,&quot;passwordDigest&quot;:&quot;Adamantly appertaining&quot;,&quot;phoneNumber&quot;:&quot;Unattended disenchantment&quot;,&quot;role&quot;:&quot;Valedictorians demonstrated&quot;,&quot;sendPushNotifications&quot;:true,&quot;sendSendgridNotifications&quot;:true,&quot;sendTwilioNotifications&quot;:false,&quot;username&quot;:&quot;Pints Sally&quot;,&quot;xSessionId&quot;:&quot;Manhandled cinematographer&quot;}</code></p>
+
+<h3>Create</h3>
+
+<p>To create a User, make a POST like below using a body similar
+to the example payload.</p>
+
+<pre><code>POST /api/users
+</code></pre>
+
+<h3>Read</h3>
+
+<p>To request a specific User object, make a GET using the following
+URL:</p>
+
+<pre><code>GET /api/users/&lt;id&gt;
+</code></pre>
+
+<p>Replace &quot;id&quot; with the id value for the object.</p>
+
+<p>The read route also supports scopes, both custom and default. To learn more about
+executing scopes see the section below.</p>
+
+<h3>Update</h3>
+
+<p>To update an object, make PUT or POST to the following URL:</p>
+
+<pre><code>PUT or POST /api/users/&lt;id&gt;
+</code></pre>
+
+<p>Replace &quot;id&quot; with the id value for the object.
+The body of the call should contain the new values.</p>
+
+<h3>Destroy</h3>
+
+<p>To destroy an object, make a DELETE to the following URL:</p>
+
+<pre><code>DELETE /api/users/&lt;id&gt;
+</code></pre>
+
+<p>Replace &quot;id&quot; with the id value for the object.</p>
+
+<h3>Scopes</h3>
+
+<p>Available scopes for User:</p>
+
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Javascript Name</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>all</td>
+<td>allScope</td>
+<td>Returns all instances</td>
+</tr>
+<tr>
+<td>exact_match</td>
+<td>exactMatchScope</td>
+<td>Returns all instances that match the provided fields exactly</td>
+</tr>
+<tr>
+<td>count</td>
+<td>countScope</td>
+<td>Counts all instances</td>
+</tr>
+<tr>
+<td>count<em>exact</em>match</td>
+<td>countExactMatchScope</td>
+<td>Counts all instances that match the provided fields exactly</td>
+</tr>
+<tr>
+<td>my<em>user</em>record</td>
+<td>myUserRecordScope</td>
+<td>Return user record for current user</td>
+</tr>
+</tbody></table>
+
+<p>To execute a scope query:</p>
+
+<pre><code>GET /api/users?scope=&lt;scope_name&gt;
+</code></pre>
+
+<p>Replace &quot;scope_name&quot; with the value in the name column in the above table. Some scopes
+may require additional query parameters, for example:</p>
+
+<pre><code>GET /api/users?scope=custom&amp;query[first_name]=bob
+</code></pre>
+
+<p>Use query[field] pattern to send a value to the scope operation.</p>
+
+<h2><a name="push-notifications"></a> Push Notifications</h2>
+
+<h2>Subscribe</h2>
+
+<p><strong>Does NOT require authentication</strong></p>
+
+<p>The supplied token (device identifier) will be subscribed to the provided channel
+belonging to either the supplied appName or the default application. If the channel
+does not exist it will be created using the supplied channelName. If the device
+does not exist it will also be created using the supplied token, provider and name.</p>
+
+<h4>POST /api/push_notifications/channel/subscribe</h4>
+
+<pre><code>{
+  channelName: &#39;News&#39;,
+  appName: &#39;someApp&#39;,
+  token: &#39;Test&#39;,
+  provider: &#39;APPLE&#39;,
+  name: &quot;Frank&#39;s iPhone&quot;
+}
+</code></pre>
+
+<h4>RESPONSE</h4>
+
+<pre><code>{
+  &quot;channels&quot;: [
+    {
+      &quot;name&quot;: &quot;News&quot;,
+      &quot;app&quot;: &quot;569938c1df324340867cfa29&quot;,
+      &quot;compositeName&quot;: &quot;News569938c1df324340867cfa29&quot;,
+      &quot;id&quot;: &quot;56a123121d1032a75980fa92&quot;
+    }
+  ],
+  &quot;app&quot;: &quot;569938c1df324340867cfa29&quot;,
+  &quot;identifier&quot;: &quot;Test&quot;,
+  &quot;name&quot;: &quot;Frank&#39;s iPhone&quot;,
+  &quot;provider&quot;: &quot;APPLE&quot;,
+  &quot;compositeIdentifier&quot;: &quot;Test569938c1df324340867cfa29&quot;,
+  &quot;id&quot;: &quot;56a151fb9af0741278fe0782&quot;
+}
+</code></pre>
+
+<p><strong>channelName</strong> should be an existing channel or a channel you wish to be created.</p>
+
+<p><strong>appName</strong> <em>optional</em> should contain the name of the app you&#39;re dealing with. If it is not supplied the default application will be used.</p>
+
+<p><strong>token</strong> is the identifier token provided by APN or GCM.</p>
+
+<p><strong>provider</strong> <em>optional</em> is either &#39;APPLE&#39; or &#39;GOOGLE&#39;. Only needs to be provided if you expect the device to not exist and needs to be created. The value will be the new device&#39;s provider.</p>
+
+<p><strong>name</strong> <em>optional</em> Can be a string identifier for the device for friendlier display to users. Only needs to be provided if you expect the device to not exist and needs to be created.</p>
+
+<p>The successful response will contain the device as well as any channels it&#39;s subscribed to, including the newly subscribed channel.</p>
+
+<h3>Subscribe in custom code</h3>
+
+<p>You can also execute the subscribe method directly in your custom code. For example:</p>
+
+<pre><code>/*
+ * The parameters for subscribe in order are:
+ * token : Identifier provided by APN or GCM.
+ * provider : &#39;APPLE&#39; or &#39;GOOGLE&#39;.
+ * name : A nickname for the device.
+ * appId : The push application.
+ * channelName : The channel belonging to appId&#39;s app.
+ * cb : function
+ */
+this.push.subscribe(&quot;abc123&quot;, &quot;APPLE&quot;, &quot;Example&#39;s iPhone&quot;, &quot;569938c1df324340867cfa29&quot;, &quot;Alerts&quot;, function(err, result) {
+  // &quot;result&quot; will be the device and it&#39;s associated channels.
+});
+</code></pre>
+
+<p>The behavior is the same as using the API endpoint. If a channel does not exist, it will be created. If the device does not exist it, will be created
+using the provider, name and token.</p>
+
+<h2>Unsubscribe</h2>
+
+<p><strong>Does NOT require authentication</strong></p>
+
+<p>Removes the supplied device token from the channel. If the device is not subscribed to the provided channel an error is returned.</p>
+
+<h4>POST /api/push_notifications/channel/unsubscribe</h4>
+
+<pre><code>{
+  channelName: &#39;News&#39;,
+  appName: &#39;someApp&#39;,
+  token: &#39;Test&#39;
+}
+</code></pre>
+
+<h4>RESPONSE</h4>
+
+<pre><code>{
+  &quot;channels&quot;: [ ],
+  &quot;app&quot;: &quot;569938c1df324340867cfa29&quot;,
+  &quot;identifier&quot;: &quot;Test&quot;,
+  &quot;name&quot;: &quot;Frank&#39;s iPhone&quot;,
+  &quot;provider&quot;: &quot;APPLE&quot;,
+  &quot;compositeIdentifier&quot;: &quot;Test569938c1df324340867cfa29&quot;,
+  &quot;id&quot;: &quot;56a151fb9af0741278fe0782&quot;
+}
+</code></pre>
+
+<p><strong>channelName</strong> should be an existing channel.</p>
+
+<p><strong>appName</strong> <em>optional</em> should contain the name of the app you&#39;re dealing with. If it is not supplied the default application will be used.</p>
+
+<p><strong>token</strong> is the identifier token provided by APN or GCM.</p>
+
+<p>Like subscribe, the successful response will contain the device as well as any channels it&#39;s subscribed to. The unsubscribed channel will no longer be in the channels list.</p>
+
+<h3>Unsubscribe in custom code</h3>
+
+<p>You can also execute the unsubscribe method directly in your custom code. For example:</p>
+
+<pre><code>/*
+ * The parameters for unsubscribe in order are:
+ * token : Identifier provided by APN or GCM.
+ * channelName : name of the channel to unsubscribe from.
+ * appId : Id of the application the channel belongs to.
+ */
+this.push.unsubscribe(&#39;abc123&#39;, &#39;channelName&#39;, &#39;appId&#39;, function(err, result) {
+  // &quot;result&quot; will be the device and it&#39;s associated channels.
+});
+</code></pre>
+
+<h2>Device&#39;s Channels</h2>
+
+<p><strong>Does NOT require authentication</strong></p>
+
+<h4>GET /api/push_notifications/device/:token/channels</h4>
+
+<h4>RESPONSE</h4>
+
+<pre><code>[       
+  {       
+    &quot;app&quot;: {
+      &quot;name&quot;: &quot;PusheNotifications&quot;,
+      &quot;id&quot;: &quot;569938c1df324340867cfa29&quot;
+    },
+    &quot;name&quot;: &quot;Alerts&quot;,      
+    &quot;compositeName&quot;: &quot;Alerts56bbc0111dbcbc3d89bcfa76&quot;,       
+    &quot;id&quot;: &quot;56bbc0221dbcbc3d89bcfa77&quot;     
+  },     
+  {     
+    &quot;app&quot;: {
+      &quot;name&quot;: &quot;PusheNotifications&quot;,
+      &quot;id&quot;: &quot;569938c1df324340867cfa29&quot;
+    },
+    &quot;name&quot;: &quot;Messages&quot;,       
+    &quot;compositeName&quot;: &quot;Messages56bbc0111dbcbc3d89bcfa76&quot;,     
+    &quot;id&quot;: &quot;56bcb8f3c1834efb189473e1&quot;
+  } 
+]
+</code></pre>
+
+<p><strong>token</strong> This is the token supplied by either GCM or APN.</p>
+
+<h2>Push Notification</h2>
+
+<p><strong>Does NOT require authentication</strong></p>
+
+<p>Sends a message to the supplied channel&#39;s devices. Includes both Google and Apple devices.</p>
+
+<h4>POST /api/push_notifications/message</h4>
+
+<pre><code>{
+  channelName: &quot;myChannel&quot;,
+  appName: &quot;someApp&quot;,
+  appleAlert: &quot;\uD83D\uDCE7 Updates Available!&quot;,
+  appleBadge:  1,
+  appleSound: &quot;ping.aiff&quot;,
+  appleExpiry: 60,
+  appleContentAvailable:  0,
+  googleCollapseKey: &quot;Updates Available&quot;,
+  googleDelayWhileIdle: true,
+  googleTimeToLive: 60
+  payload: &quot;You&#39;ve received a new message!&quot;
+}
+</code></pre>
+
+<p><strong>channelName</strong>  should be an existing channel.</p>
+
+<p><strong>appName</strong> <em>optional</em> should contain the name of the app the channel belongs to. If it is not supplied the default application will be used.</p>
+
+<p><strong>appleAlert</strong> The text to display in the alert. Apple only. Defaults to &quot;You have a new notification!&quot;.</p>
+
+<p><strong>appleBadge</strong> <em>optional</em> Number to display on the app&#39;s badge icon. Apple only. Defaults to 1.</p>
+
+<p><strong>appleSound</strong> <em>optional</em> The sound file to play on the device when receiving the notification. The file should exist within your application&#39;s bundle or in the Library/Sounds folder. Apple only. Defaults to &quot;ping.aiff&quot;.</p>
+
+<p><strong>appleExpiry</strong> Minutes. Time when the push notification is no longer relevant and can be discarded regardless if it has been delivered. Apple only. Defaults to 60.</p>
+
+<p><strong>appleContentAvailable</strong> <em>optional</em> 1 indicates that the application has content available. Apple only. Defaults to 0 - no content available.</p>
+
+<p><strong>googleCollapseKey</strong> <em>optional</em> Identifies a group of messages that can be collapsed to display only the most recent notification. Google only.</p>
+
+<p><strong>googleDelayWhileIdle</strong> <em>optional</em> Indicates whether the message should be delayed until the device is active. Google only. Default is false.</p>
+
+<p><strong>googleTimeToLive</strong> <em>optional</em> This parameter specifies how long (in minutes) the message should be kept in GCM storage if the device is offline. Google only. Default is 4 weeks.</p>
+
+<p><strong>payload</strong> <em>required</em> Content of the alert.</p>
+
+<h3>Push Notification in custom code</h3>
+
+<p>You can also use the push API to send a message object to an application&#39;s channel in your custom code. To do so, first create a new message object:</p>
+
+<pre><code>Message.create({channel: &#39;channel_id&#39;, payload: &#39;the message&#39;}).exec(function(err, result) {
+  // Handle any validation errors that may occur
+  // result is your persisted message.
+})
+</code></pre>
+
+<p>Once you have your message object you can use it to send message to a channel using the push API:</p>
+
+<pre><code>// &#39;result&#39; is the result of the create callback from above - the message object.
+// Replace channelName with the appropriate channel name and appId with a push application&#39;s id.
+this.push.sendMessage(result, &#39;channelName&#39;, &#39;appId&#39;, function() {
+  // the callback is executed when messages are sending.
+})
+</code></pre>
+
+<h2><a name="file-uploads"></a> File Uploads</h2>
+
+<h2><a name=“file-uploads”></a> File Uploads</h2>
+
+<p>Models may contain file fields. Generated APIs provides a set of operations to enable CRUD file operations.</p>
+
+<h2>Creating a resource that contains a file field</h2>
+
+<p>Suppose we have a Candidate model with three fields:</p>
+
+<ul>
+<li>name</li>
+<li>lastName</li>
+<li>resume</li>
+</ul>
+
+<p>Name and lastName are Strings, and resume is expected to be an attached file (In example: a PDF or DOC). We could execute following command to create a model instance:</p>
+
+<h4>POST http://localhost:1337/api/v1/employees</h4>
+
+<pre><code>{
+&quot;lastname&quot;: &quot;John&quot;,
+&quot;name&quot;: &quot;Dow&quot;,
+&quot;resume&quot;: &quot;@file.png&quot;
+}
+</code></pre>
+
+<h4>RESPONSE</h4>
+
+<pre><code>{
+&quot;lastname&quot;: &quot;BBBB&quot;,
+&quot;name&quot;: &quot; POPO&quot;,
+&quot;resume&quot;: &quot;/api/employees/files/26f273e8-a44d-499b-b5fa-1bc6cef7ef3c.png&quot;,
+&quot;id&quot;: &quot;56cfe170f67da8143f9023fe&quot;
+}
+</code></pre>
+
+<p>!Important: POST request MUST BE of type multipart/form-data</p>
+
+<p>File fields wont return the file contents embedded in the model representation but an outbound link to resource. The last part of the URI is the file name.</p>
+
+<h2>Updating / Patching a resource that contains a file field</h2>
+
+<p>A resource with files can be patched / updated through the API.</p>
+
+<h4>PUT http://localhost:1337/api/v1/employees/56cfe170f67da8143f9023fe</h4>
+
+<pre><code>{
+&quot;lastname&quot;: &quot;Doe&quot;,
+&quot;name&quot;: &quot; John&quot;
+}
+</code></pre>
+
+<h4>RESPONSE 204</h4>
+
+<p>So in this case, resource with id 56cfe170f67da8143f9023fe will be updated with provided values.</p>
+
+<h2>Updating / Patching just model files</h2>
+
+<p>Suppose we have an existing employee like this:</p>
+
+<pre><code>{
+&quot;lastname&quot;: &quot;Doe&quot;,
+&quot;name&quot;: &quot; John&quot;,
+&quot;resume&quot;: &quot;/api/employees/files/babce698-6069-4ed7-a821-09489fefe213.png&quot;,
+&quot;id&quot;: &quot;56d8f4e8d4bbbf7d3f9e0224&quot;
+}
+</code></pre>
+
+<p>If you&#39;d like to remove the resume from a candidate simply send an empty string in the request for that field:</p>
+
+<h4>PUT http://localhost:1337/api/v1/employees/56cfe170f67da8143f9023fe</h4>
+
+<pre><code>{
+&quot;lastname&quot;: &quot;Doe&quot;,
+&quot;name&quot;: &quot; John&quot;,
+&quot;resume&quot;: &quot;&quot;,
+}
+</code></pre>
+
+<p>Executing request above, resume file will be removed from storage, and model will be updated setting resume file url field to null. So a get request over that model instance will return:</p>
+
+<h4>RESPONSE</h4>
+
+<p>{
+&quot;lastname&quot;: &quot;Doe&quot;,
+&quot;name&quot;: &quot; John&quot;,
+&quot;resume&quot;: null,
+&quot;id&quot;: &quot;56d8f4e8d4bbbf7d3f9e0224&quot;
+}</p>
+
+<p>The API will automatically delete files associated with a model when it is destroyed.</p>
+
+<pre><code>#### DELETE http://localhost:1337/api/v1/employees/56cfe170f67da8143f9023fe
+</code></pre>
+
+<h4>RESPONSE 204</h4>
+
+<p>## <a name="programmatic-crud-and-query-scope-calls"></a> Programmatic CRUD and Query Scope Calls</p>
+
+<h3>Create</h3>
+
+<p>If you want to create a NotificationLog in your custom code:</p>
+
+<pre><code class="javascript">// Pass the create method an object containing the model attributes
+V1NotificationLog.create(&lt;values&gt;)
+  .then(function(result) {
+    // result is the object created.
+  })
+  .catch(function(err) {
+    // Handle any error that may occur
+  });
+</code></pre>
+
+<h3>Read</h3>
+
+<p>If you want to find a NotificationLog in your custom code:</p>
+
+<pre><code class="javascript">V1NotificationLog.findOne({id: &lt;id&gt;})
+  .then(function(result) {
+    // result is the object found.
+  })
+  .catch(function(err) {
+    // Handle any error that may occur
+  });
+</code></pre>
+
+<h3>Update</h3>
+
+<p>If you want to update a NotificationLog in your custom code:</p>
+
+<pre><code class="javascript">// params is the &quot;where&quot; portion of the update
+var params = {id: 1};
+V1NotificationLog.update(params, &lt;values&gt;)
+  .then(function(result) {
+    // result is the updated object.
+  })
+  .catch(function(err) {
+    // Handle any error that may occur
+  })
+</code></pre>
+
+<h3>Destroy</h3>
+
+<p>If you want to destroy a NotificationLog in your custom code:</p>
+
+<pre><code class="javascript">V1NotificationLog.destroy(id)
+  .then(function() {
+    // success
+  })
+  .catch(function(err) {
+    // Handle any error that may occur
+  })
+```### Create
+
+If you want to create a Order in your custom code:
+
+```javascript
+// Pass the create method an object containing the model attributes
+V1Order.create(&lt;values&gt;)
+  .then(function(result) {
+    // result is the object created.
+  })
+  .catch(function(err) {
+    // Handle any error that may occur
+  });
+</code></pre>
+
+<h3>Read</h3>
+
+<p>If you want to find a Order in your custom code:</p>
+
+<pre><code class="javascript">V1Order.findOne({id: &lt;id&gt;})
+  .then(function(result) {
+    // result is the object found.
+  })
+  .catch(function(err) {
+    // Handle any error that may occur
+  });
+</code></pre>
+
+<h3>Update</h3>
+
+<p>If you want to update a Order in your custom code:</p>
+
+<pre><code class="javascript">// params is the &quot;where&quot; portion of the update
+var params = {id: 1};
+V1Order.update(params, &lt;values&gt;)
+  .then(function(result) {
+    // result is the updated object.
+  })
+  .catch(function(err) {
+    // Handle any error that may occur
+  })
+</code></pre>
+
+<h3>Destroy</h3>
+
+<p>If you want to destroy a Order in your custom code:</p>
+
+<pre><code class="javascript">V1Order.destroy(id)
+  .then(function() {
+    // success
+  })
+  .catch(function(err) {
+    // Handle any error that may occur
+  })
+```### Create
+
+If you want to create a SendGrid in your custom code:
+
+```javascript
+/* First parameter is the name of the action you&#39;d like to execute.
+ * params are additional URL parameters that you&#39;d like to send with the outgoing request.
+ * values should be an object containing the fields for the new object.
+ * context is the request context used for interpolating values within the call, this is
+ *  always req.context
+ * The last parameter is an error first callback function.
+ */
+V1SendGrid.request(&#39;create&#39;, params, values, req.context, function(err, result) {
+  if (err) {
+    // Handle error
+  } else {
+    // result is the created object
+  }
+});
+</code></pre>
+
+<h3>Read</h3>
+
+<p>If you want to find a SendGrid in your custom code:</p>
+
+<pre><code class="javascript">/* First parameter is the name of the action you&#39;d like to execute.
+ * params are additional URL parameters that you&#39;d like to send with the outgoing request.
+ * values should be an object containing the fields for the new object - not used in read calls.
+ * context is the request context used for interpolating values within the call, this is
+ *  always req.context
+ * The last param is an error first callback function.
+ */
+var params = { limit: 10 };
+V1SendGrid.request(&#39;read&#39;, params, values, req.context, function(err, result) {
+  if (err) {
+    // Handle error
+  } else {
+    // result is the found object
+  }
+});
+</code></pre>
+
+<h3>Update</h3>
+
+<p>If you want to update a SendGrid in your custom code:</p>
+
+<pre><code class="javascript">/* First parameter is the name of the action you&#39;d like to execute.
+ * params are additional URL parameters that you&#39;d like to send with the outgoing request.
+ * values should be an object containing the fields to be updated.
+ * context is the request context used for interpolating values within the call, this is
+ *  always req.context
+ * The last param is an error first callback function.
+ */
+V1SendGrid.request(&#39;update&#39;, params, values, req.context, function(err, result) {
+  if (err) {
+    // Handle error
+  } else {
+    // result is the updated object
+  }
+});
+</code></pre>
+
+<h3>Destroy</h3>
+
+<p>If you want to destroy a SendGrid in your custom code:</p>
+
+<pre><code class="javascript">/* First parameter is the name of the action you&#39;d like to execute.
+ * params are additional URL parameters that you&#39;d like to send with the outgoing request.
+ * values should be an object containing the fields for the new object - not used in delete calls.
+ * context is the request context used for interpolating values within the call, this is
+ *  always req.context
+ * The last param is an error first callback function.
+ */
+V1SendGrid.request(&#39;delete&#39;, params, values, req.context, function(err) {
+  if (err) {
+    // Handle error
+  }
+});
+```### Create
+
+If you want to create a Twilio in your custom code:
+
+```javascript
+/* First parameter is the name of the action you&#39;d like to execute.
+ * params are additional URL parameters that you&#39;d like to send with the outgoing request.
+ * values should be an object containing the fields for the new object.
+ * context is the request context used for interpolating values within the call, this is
+ *  always req.context
+ * The last parameter is an error first callback function.
+ */
+V1Twilio.request(&#39;create&#39;, params, values, req.context, function(err, result) {
+  if (err) {
+    // Handle error
+  } else {
+    // result is the created object
+  }
+});
+</code></pre>
+
+<h3>Read</h3>
+
+<p>If you want to find a Twilio in your custom code:</p>
+
+<pre><code class="javascript">/* First parameter is the name of the action you&#39;d like to execute.
+ * params are additional URL parameters that you&#39;d like to send with the outgoing request.
+ * values should be an object containing the fields for the new object - not used in read calls.
+ * context is the request context used for interpolating values within the call, this is
+ *  always req.context
+ * The last param is an error first callback function.
+ */
+var params = { limit: 10 };
+V1Twilio.request(&#39;read&#39;, params, values, req.context, function(err, result) {
+  if (err) {
+    // Handle error
+  } else {
+    // result is the found object
+  }
+});
+</code></pre>
+
+<h3>Update</h3>
+
+<p>If you want to update a Twilio in your custom code:</p>
+
+<pre><code class="javascript">/* First parameter is the name of the action you&#39;d like to execute.
+ * params are additional URL parameters that you&#39;d like to send with the outgoing request.
+ * values should be an object containing the fields to be updated.
+ * context is the request context used for interpolating values within the call, this is
+ *  always req.context
+ * The last param is an error first callback function.
+ */
+V1Twilio.request(&#39;update&#39;, params, values, req.context, function(err, result) {
+  if (err) {
+    // Handle error
+  } else {
+    // result is the updated object
+  }
+});
+</code></pre>
+
+<h3>Destroy</h3>
+
+<p>If you want to destroy a Twilio in your custom code:</p>
+
+<pre><code class="javascript">/* First parameter is the name of the action you&#39;d like to execute.
+ * params are additional URL parameters that you&#39;d like to send with the outgoing request.
+ * values should be an object containing the fields for the new object - not used in delete calls.
+ * context is the request context used for interpolating values within the call, this is
+ *  always req.context
+ * The last param is an error first callback function.
+ */
+V1Twilio.request(&#39;delete&#39;, params, values, req.context, function(err) {
+  if (err) {
+    // Handle error
+  }
+});
+```### Create
+
+If you want to create a User in your custom code:
+
+```javascript
+// Pass the create method an object containing the model attributes
+V1User.create(&lt;values&gt;)
+  .then(function(result) {
+    // result is the object created.
+  })
+  .catch(function(err) {
+    // Handle any error that may occur
+  });
+</code></pre>
+
+<h3>Read</h3>
+
+<p>If you want to find a User in your custom code:</p>
+
+<pre><code class="javascript">V1User.findOne({id: &lt;id&gt;})
+  .then(function(result) {
+    // result is the object found.
+  })
+  .catch(function(err) {
+    // Handle any error that may occur
+  });
+</code></pre>
+
+<h3>Update</h3>
+
+<p>If you want to update a User in your custom code:</p>
+
+<pre><code class="javascript">// params is the &quot;where&quot; portion of the update
+var params = {id: 1};
+V1User.update(params, &lt;values&gt;)
+  .then(function(result) {
+    // result is the updated object.
+  })
+  .catch(function(err) {
+    // Handle any error that may occur
+  })
+</code></pre>
+
+<h3>Destroy</h3>
+
+<p>If you want to destroy a User in your custom code:</p>
+
+<pre><code class="javascript">V1User.destroy(id)
+  .then(function() {
+    // success
+  })
+  .catch(function(err) {
+    // Handle any error that may occur
+  })
+</code></pre>
+
+<h2><a name="roles"></a> Roles</h2>
+
+<ul>
+<li>unauthenticated<br></li>
+<li>authenticated<em>without</em>role<br></li>
+</ul>
+
+<h2><a name="api-versions"></a>API Versions</h2>
+
+<ul>
+<li>Version 1 at /api/v1 OR /api<br></li>
+</ul>
+
+<h2><a name="storage-interfaces"></a> Storage Interfaces</h2>
+
+<ul>
+<li>AnyPresence Storage (Local)<br></li>
+<li>TwilioAPI (Http)<br></li>
+<li>SendGridAPI (Http)<br></li>
+</ul>

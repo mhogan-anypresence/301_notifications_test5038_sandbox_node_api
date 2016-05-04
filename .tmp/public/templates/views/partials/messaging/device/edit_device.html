@@ -1,0 +1,14 @@
+<ul class="breadcrumb">
+  <li><a href="#/index">Home</a></li>
+  <li><a href="#/messaging">Apps</a></li>
+  <li><a href='#/messaging/{{currentApp.id}}/index'>{{currentApp.name}}</a></li>
+  <li class='active'>Devices</li>
+  <li class='active'>{{instance.name || instance.id}}</li>
+</ul>
+
+<div class="page-header">
+  <h1>Edit Device</h1>
+</div>
+
+<form novalidate class="simple-form simple_form form-horizontal" ng-include src="'templates/views/partials/messaging/device/form_device.html'">
+</form>

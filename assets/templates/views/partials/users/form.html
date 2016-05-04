@@ -1,0 +1,75 @@
+<div class="alert alert-danger" ng-if="error">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  <strong>Error.</strong><span ng-if="!errorMessage"> Please review the problems below</span><span ng-if="errorMessage"> {{errorMessage}}</span>
+</div>
+
+    
+        
+        
+        
+            <form-input name="email_address" label="Email address" required="false" property="instance.email_address" type="text" errors="errors.email_address"></form-input>
+        
+    
+        
+        
+        
+            <form-input name="password" label="Password" required="false" property="instance.password" type="password" errors="errors.password"></form-input>
+        
+    
+        
+        
+        
+            <form-input name="password_confirmation" label="Password confirmation" required="false" property="instance.password_confirmation" type="password" errors="errors.password_confirmation"></form-input>
+        
+    
+        
+        
+        
+    
+        
+        
+        
+            <form-input name="phone_number" label="Phone number" required="false" property="instance.phone_number" type="text" errors="errors.phone_number"></form-input>
+        
+    
+        
+        
+        
+            <form-input name="role" label="Role" required="false" property="instance.role" type="text" errors="errors.role"></form-input>
+        
+    
+        
+        
+        
+            <form-input name="send_push_notifications" label="Send push notifications" required="false" property="instance.send_push_notifications" type="checkbox" errors="errors.send_push_notifications"></form-input>
+        
+    
+        
+        
+        
+            <form-input name="send_sendgrid_notifications" label="Send sendgrid notifications" required="false" property="instance.send_sendgrid_notifications" type="checkbox" errors="errors.send_sendgrid_notifications"></form-input>
+        
+    
+        
+        
+        
+            <form-input name="send_twilio_notifications" label="Send twilio notifications" required="false" property="instance.send_twilio_notifications" type="checkbox" errors="errors.send_twilio_notifications"></form-input>
+        
+    
+        
+        
+        
+            <form-input name="username" label="Username" required="false" property="instance.username" type="text" errors="errors.username"></form-input>
+        
+    
+        
+        
+        
+            <form-input name="x_session_id" label="X session" required="false" property="instance.x_session_id" type="text" errors="errors.x_session_id"></form-input>
+        
+    
+
+<div class="form-actions">
+  <input class="btn btn-primary" name="commit" type="submit" value="Submit" ng-click="submit(instance)" ng-disabled="loading"/>
+  <a href="#/users" class="btn">Cancel</a>
+</div>

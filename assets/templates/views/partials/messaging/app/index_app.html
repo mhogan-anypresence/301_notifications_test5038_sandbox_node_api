@@ -1,0 +1,273 @@
+<div class="container-fluid container-messaging">
+
+  <div class="row">
+    <ul class="breadcrumb">
+      <li><a href="#/index">Home</a></li>
+      <li><a href="#/messaging">Apps</a></li>
+      <li class="active">{{currentApp.name}}</li>
+    </ul>
+  </div>
+  <!--Messages-->
+  <div class="list-group-item clearfix list-group-collapse send-message">
+    <div ng-controller="MessageCreateController">
+
+      <div class="alert alert-danger" ng-if="error">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span ng-if="!errorMessage"> Please review the problems below</span><span ng-if="errorMessage"> {{errorMessage}}</span>
+      </div>
+
+      <div class='alert alert-success' ng-if='success'>
+        <span class='glyphicon glyphicon-ok'></span> Sent!
+      </div>
+
+      <div class="input-group send-message-header">
+      <span class="input-group-addon" id="new-message">
+        <span class="glyphicon glyphicon-envelope"></span>
+      </span>
+        <input name='payload' ng-class="{ 'has-error': errors['payload']}" type="text" class="form-control" placeholder="Write message" ng-model="message.payload"/>
+        <select name='channelName' ng-class="{ 'has-error': errors['channel']}" class='form-control select select-message' name="resourceTemp" ng-model="message.channelName">
+          <option ng-repeat='channel in channels track by $index' value="{{channel.name}}">{{channel.name}}</option>
+        </select>
+        <div class="input-group-btn">
+          <a class="btn btn-default" role="button" data-toggle="collapse" data-target="#collapseMessageDetails"><span class="glyphicon glyphicon-list"></span>
+          </a>
+          <button type="button" class="btn btn-success" ng-click="send()"><span
+          class="glyphicon glyphicon-send"></span>
+          </button>
+        </div>
+      </div>
+      <div id="collapseMessageDetails" class="sublinks collapse">
+        <div class="list-group-item small">
+          <table class="table message-details">
+            <thead>
+            <tr>
+              <th>Apple Configuration</th>
+              <th>Android Configuration</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>
+                <div class="input-group"><span class="input-group-addon" id="new-message">Badge</span>
+                  <input type="text" class="form-control" placeholder="Displayed on app icon" ng-model="message.appleBadge"/>
+                </div>
+              </td>
+              <td>
+                <div class="input-group"><span class="input-group-addon" id="new-message">Collapse Key</span>
+                  <input type="text" class="form-control" ng-model="message.googleCollapseKey"/>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="input-group"><span class="input-group-addon" id="new-message">Alert</span>
+                  <input type="text" class="form-control" placeholder="Text to display in the alert" ng-model="message.appleAlert"/>
+                </div>
+              </td>
+              <td>
+                <div class="input-group"><span class="input-group-addon" id="new-message">Delay While Idle</span>
+                  <select class='form-control select-delay-while-idle' ng-model='message.googleDelayWhileIdle'>
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                  </select>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="input-group"><span class="input-group-addon" id="new-message">Sound</span>
+                  <input type="text" class="form-control" placeholder="ping.aiff" ng-model="message.appleSound"/>
+                </div>
+              </td>
+              <td>
+                <div class="input-group"><span class="input-group-addon" id="new-message">Time To Live</span>
+                  <input type="text" class="form-control" placeholder="Minutes until push expires" ng-model="message.googleTimeToLive"/>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="input-group"><span class="input-group-addon" id="new-message">Expiry</span>
+                  <input type="number" class="form-control" placeholder="Minutes until push expires" ng-model="message.appleExpiry"/>
+                </div>
+              </td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="input-group"><span class="input-group-addon" id="new-message">Content-Available</span>
+                  <select class='form-control select-delay-while-idle' ng-model='message.appleContentAvailable'>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                  </select>
+
+                  <!-- <input type="text" class="form-control" placeholder="1 indicates data is available" ng-model="message.appleContentAvailable"/> -->
+                </div>
+              </td>
+              <td>&nbsp;</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--Messages-->
+  <div ng-controller="ChannelListController">
+
+    <div class="panel panel-default panel-messaging" >
+      <div class="panel-heading clearfix">
+        <table class="table-full ">
+          <tbody>
+          <tr>
+            <td class="title-badge">Channels <span class='label label-primary'>{{channelPagination.count}}</span></td>
+            <td class="new-application">
+              <a class="btn btn-primary" href="#/messaging/{{app_id}}/channel/new"><i class="fa fa-plus"></i> New</a>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class='panel-body'>
+        <table class="table table-full" ng-if="instances.length > 0">
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Devices</th>
+            <th>Messages</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr ng-repeat="channel in instances track by $index">
+            <td>{{channel.name}}</td>
+            <td>{{channel.devices.length}}</td>
+            <td>{{channel.messages.length}}</td>
+            <td class='actions table-actions-3'>
+              <div class='btn-group pull-right'>
+                <a type='button' class='btn btn-default' href="#/messaging/{{currentApp.id}}/channel/{{channel.id}}/edit"><span class="glyphicon glyphicon-pencil"></span></a></a>
+                <a type='button' class='btn btn-default' href="#/messaging/{{currentApp.id}}/channel/{{channel.id}}"><span class='glyphicon glyphicon-eye-open'></span></a>
+                <a type='button' class='btn btn-danger' ng-click='destroy(channel.id)'><span class="glyphicon glyphicon-trash"></span></a>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+          <tfoot>
+          <tr>
+            <td colspan="4">
+              <paginator ng-if='instances.length > 0'></paginator>
+            </td>
+          </tr>
+          </tfoot>
+        </table>
+        <div class='alert alert-info'ng-if="instances.length === 0">
+          No Channels
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div ng-controller="DeviceListController">
+    <div class="panel panel-default panel-messaging" >
+      <div class="panel-heading clearfix">
+        <table class="table-full ">
+          <tbody>
+          <tr>
+            <td class="title-badge">Devices <span class='label label-primary'>{{devicePagination.count}}</span></td>
+            <td class="new-application">
+              <a class="btn btn-primary" href="#/messaging/{{app_id}}/device/new"><i class="fa fa-plus"></i> New</a>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class='panel-body'>
+        <table class="table table-full" ng-if="instances.length > 0">
+          <thead>
+            <tr>
+              <th>Identifier</th>
+              <th>Provider</th>
+              <th>Name</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="device in instances track by $index">
+              <td>{{device.identifier}}</td>
+              <td>{{device.provider}}</td>
+              <td>{{device.name}}</td>
+              <td class="actions table-actions-3">
+                <div class='btn-group pull-right'>
+                  <a type='button' class='btn btn-default' href="#/messaging/{{app_id}}/device/{{device.id}}/edit"><span class="glyphicon glyphicon-pencil"></span></a>
+                  <a type='button' class='btn btn-default' href="#/messaging/{{app_id}}/device/{{device.id}}"><span class='glyphicon glyphicon-eye-open'></span></a>
+                  <a type='button' class='btn btn-danger' ng-click='destroy(device.id)'><span class="glyphicon glyphicon-trash"></span></a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="4">
+                <paginator ng-if='instances.length > 0'></paginator>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+
+        <div class='alert alert-info'ng-if="instances.length === 0">
+          No Devices
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <div ng-controller='MessageListController'>
+    <div class="panel panel-default panel-messaging" >
+      <div class="panel-heading clearfix">
+        <table class="table-full ">
+          <tbody>
+          <tr>
+            <td class="title-badge">Messages <span class='label label-primary'>{{messagePagination.count}}</span></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class='panel-body'>
+        <table class="table table-full" ng-if="instances.length > 0">
+          <thead>
+            <tr>
+              <th>Channel</th>
+              <th>Date</th>
+              <th>Payload</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="message in instances">
+              <td>{{message.channel.name}}</td>
+              <td>{{formatDate(message.createdAt)}}</td>
+              <td style='width: 60%;'>{{message.payload}}</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="3">
+                <paginator ng-if='instances.length > 0'></paginator>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+
+        <div class='alert alert-info'ng-if="instances.length === 0">
+          No Messages
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+</div>

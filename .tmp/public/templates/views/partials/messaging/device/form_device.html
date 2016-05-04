@@ -1,0 +1,16 @@
+<div class="alert alert-danger" ng-if="error">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  <strong>Error.</strong><span ng-if="!errorMessage"> Please review the problems below</span><span ng-if="errorMessage"> {{errorMessage}}</span>
+</div>
+
+<form-input name="identifier" label="Identifier" required="true" property="instance.identifier" type="text" errors="errors.identifier"></form-input>
+<form-input name="name" label="Name" required="false" property="instance.name" type="text" errors="errors.name"></form-input>
+<div ng-init="instance.provider">
+  <label>Apple <input name="provider" type="radio" label="Apple" ng-model="instance.provider" value="APPLE"></label>
+  <label>Google <input name="provider" type="radio" label="Google" ng-model="instance.provider" value="GOOGLE"></label>
+</div>
+
+<div class="form-actions">
+  <input class="btn btn-primary" name="commit" type="submit" value="Submit" ng-click="submit(instance)" ng-disabled="loading" />
+  <a href='#/messaging/{{currentApp.id}}/index'> Return</a>
+</div>

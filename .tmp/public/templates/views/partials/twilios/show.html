@@ -1,0 +1,35 @@
+<ul class="breadcrumb">
+  <li><a href="#/index">Home</a></li>
+  <li><a href="#/twilios">Twilios</a></li>
+  <li class="active">Twilio</li>
+</ul>
+
+<div class="page-header">
+  <h1>Twilio</h1>
+  <a class="btn btn-primary" ng-href="#/twilios/{{instance.id}}/edit">
+    <i class="fa fa-pencil"></i>
+    Edit
+  </a>
+</div>
+
+<div class="alert alert-danger" ng-if="error">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  <strong>Error.</strong><span ng-if="!errorMessage">An unexpected error was encountered</span><span ng-if="errorMessage">{{errorMessage}}</span>
+</div>
+
+<table class="table table-striped table-hover" condensed="false" hover="true" striped="true">
+  <tbody>
+    <tr>
+      <td>Id</td>
+      <td>{{instance.id}}</td>
+    </tr>
+    <tr>
+      <td>Message</td>
+      <td>{{instance.message}}</td>
+    </tr>
+    <tr>
+      <td>To Phone Number</td>
+      <td>{{instance.to_phone_number}}</td>
+    </tr>
+  </tbody>
+</table>

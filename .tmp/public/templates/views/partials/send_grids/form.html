@@ -1,0 +1,47 @@
+<div class="alert alert-danger" ng-if="error">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  <strong>Error.</strong><span ng-if="!errorMessage"> Please review the problems below</span><span ng-if="errorMessage"> {{errorMessage}}</span>
+</div>
+
+    
+        
+        
+        
+            
+            
+            <form-input name="email_from" label="Email from" required="true" property="instance.email_from" type="text" errors="errors.email_from"></form-input>
+        
+        
+    
+        
+        
+        
+            
+            
+            <form-input name="email_to" label="Email to" required="true" property="instance.email_to" type="text" errors="errors.email_to"></form-input>
+        
+        
+    
+        
+        
+        
+            
+            
+            <form-input name="message" label="Message" required="true" property="instance.message" type="text" errors="errors.message"></form-input>
+        
+        
+    
+        
+        
+        
+            
+            
+            <form-input name="subject" label="Subject" required="true" property="instance.subject" type="text" errors="errors.subject"></form-input>
+        
+        
+    
+
+<div class="form-actions">
+  <input class="btn btn-primary" name="commit" type="submit" value="Submit" ng-click="submit(instance)" ng-disabled="loading"/>
+  <a href="#/send_grids" class="btn">Cancel</a>
+</div>
